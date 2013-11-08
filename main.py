@@ -85,7 +85,7 @@ class Bank(object):
 # bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
 # print bank.get_transactions()
 
-class QIFItem(object):
+class Transaction(object):
 	def __init__(self):
 		self.date = None
 		self.amount = None
@@ -122,7 +122,7 @@ class QIFParser(object):
 			self.qif_lines = self.load_file(qif_file)
 		else:
 			self.qif_lines = self.load_string(qif_string)
-		self.items = []
+		self.transactions = []
 	def load_file(self, qif_file):
 		with open(qif_file, 'r') as qif:
 			qif_string = qif.read()
@@ -134,10 +134,10 @@ class QIFParser(object):
 			if l.startswith(self.FILE_START):
 				break
 			if l == self.ENTRY_START:
-				self.items.append(QIFItem())
+				self.transactions.append(Transaction())
 			if l[0] in self.FIELDS:
-				self.items[-1].__dict__[self.FIELDS[l[0]]] = l[1:]
-		return self.items
+				setattr(self.transactions[-1], self.FIELDS[l[0]], l[1:])
+		return self.transactions
 
 # qifp = QIFParser(qif_file='transactions.qif')
 # for i in qifp.parse():
