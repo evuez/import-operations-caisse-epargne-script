@@ -1,6 +1,6 @@
 Import de transactions Caisse d'épargne
 =======================================
-### Import en QIF ou CSV des transactions d'un compte caisse d'épargne avec parser pour les fichiers QIF
+### Import en QIF ou CSV des transactions d'un compte caisse d'épargne avec parseur pour les fichiers QIF
 
 *Ce script est une adpatation en python du script d'[esion][1] disponible à l'adresse suivante https://github.com/esion/import-operations-caisse-epargne-script*
 
@@ -25,6 +25,11 @@ La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichie
 
     # transactions des 6 derniers jours
     print bank.get_transactions(7, 1)
+
+	# utilisation du parseur pour afficher les transactions au format date: montant
+    qifp = QIFParser(qif_string=bank.get_transactions(10, 2))
+    for item in qifp.parse():
+        print '{0}: {1}'.format(item.date, item.amount)
 
 
   [1]: https://github.com/esion
