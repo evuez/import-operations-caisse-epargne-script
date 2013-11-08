@@ -3,7 +3,7 @@
 
 import requests
 from datetime import date, timedelta
-from settings import *
+from settings import CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN
 
 class Bank(object):
 	AUTH_URL = 'https://www.net444.caisse-epargne.fr/login.aspx'
