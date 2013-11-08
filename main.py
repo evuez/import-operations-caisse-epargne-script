@@ -82,5 +82,8 @@ class Bank(object):
 		self._load(start, end)
 		return self._retrieve()
 
-bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
-print bank.get_transactions()
+# bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
+# print bank.get_transactions()
+
+class Parser(object):
+	pass
