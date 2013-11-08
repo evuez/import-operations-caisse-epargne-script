@@ -82,8 +82,8 @@ class Bank(object):
 		self._load(start, end)
 		return self._retrieve()
 
-bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
-print bank.get_transactions()
+# bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
+# print bank.get_transactions()
 
 class QIFItem(object):
 	def __init__(self):
@@ -99,3 +99,46 @@ class QIFItem(object):
 		self.split_category = None
 		self.split_memo = None
 		self.split_amount = None
+
+class QIFParser(object):
+	FILE_START = '!Type:'
+	ENTRY_START = '^'
+	FIELDS = {
+		'D': 'date',
+		'T': 'amount',
+		'M': 'memo',
+		'C': 'cleared',
+		'N': 'number',
+		'P': 'payee',
+		'A': 'address',
+		'L': 'category',
+		'F': 'flag',
+		'S': 'split_category',
+		'E': 'split_memo',
+		'$': 'split_amount'
+	}
+	def __init__(self, qif_string=None, qif_file=None):
+		if qif_file is not None:
+			self.qif_lines = self.load_file(qif_file)
+		else:
+			self.qif_lines = self.load_string(qif_string)
+		self.items = []
+	def load_file(self, qif_file):
+		with open(qif_file, 'r') as qif:
+			qif_string = qif.read()
+		return self.load_string(qif_string)
+	def load_string(self, qif_string):
+		return qif_string.splitlines()[::-1]
+	def parse(self):
+		for l in self.qif_lines:
+			if l.startswith(self.FILE_START):
+				break
+			if l == self.ENTRY_START:
+				self.items.append(QIFItem())
+			if l[0] in self.FIELDS:
+				self.items[-1].__dict__[self.FIELDS[l[0]]] = l[1:]
+		return self.items
+
+# qifp = QIFParser(qif_file='transactions.qif')
+# for i in qifp.parse():
+# 	print i.amount
