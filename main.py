@@ -82,8 +82,20 @@ class Bank(object):
 		self._load(start, end)
 		return self._retrieve()
 
-# bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
-# print bank.get_transactions()
+bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
+print bank.get_transactions()
 
-class Parser(object):
-	pass
+class QIFItem(object):
+	def __init__(self):
+		self.date = None
+		self.amount = None
+		self.memo = None
+		self.cleared = None
+		self.number = None
+		self.payee = None
+		self.address = None
+		self.category = None
+		self.flag = None
+		self.split_category = None
+		self.split_memo = None
+		self.split_amount = None
