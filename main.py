@@ -85,6 +85,9 @@ class Bank(object):
 # bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
 # print bank.get_transactions()
 
+class ArgumentRequired(Exception):
+	pass
+
 class Transaction(object):
 	def __init__(self):
 		self.date = None
@@ -125,8 +128,10 @@ class Transactions(object):
 	def __init__(self, file_=None, str_=None):
 		self.current = 0
 		self.transactions = []
-		if any((file_, str_)) is True:
+		try:
 			self.load_qif(file_, str_)
+		except ArgumentRequired:
+			pass
 	def __iter__(self):
 		return self
 	def next(self):
@@ -162,7 +167,7 @@ class Transactions(object):
 	def load_qif(self, qif_file=None, qif_str=None):
 		self.transactions = [] # reset transactions when loading new file or string
 		if any((qif_file, qif_str)) is False:
-			raise Exception("An argument is required")
+			raise ArgumentRequired
 		if qif_file is not None:
 			lines = self.load_file(qif_file)
 		elif qif_str is not None:
