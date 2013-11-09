@@ -82,8 +82,6 @@ class Bank(object):
 		self._load(start, end)
 		return self._retrieve()
 
-# bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
-# print bank.get_transactions()
 
 class ArgumentRequired(Exception):
 	pass
@@ -129,7 +127,7 @@ class Transactions(object):
 		'$': 'split_amount'
 	}
 	def __init__(self, file_=None, str_=None):
-		self.current = 0
+		self.cursor = 0
 		self.transactions = []
 		try:
 			self.load_qif(file_, str_)
@@ -146,15 +144,25 @@ class Transactions(object):
 		return self
 	def next(self):
 		try:
-			self.current += 1
-			return self[self.current - 1]
+			self.cursor += 1
+			return self[self.cursor - 1]
 		except IndexError:
 			raise StopIteration
+	def first(self):
+		try:
+			return self[0]
+		except IndexError:
+			return None
 	def last(self):
 		try:
 			return self[-1]
 		except IndexError:
 			return None
+	def current(self):
+		try:
+			return self[self.cursor]
+		except IndexError:
+			raise None
 	def load_file(self, file_):
 		with open(file_, 'r') as transactions:
 			str_ = transactions.read()
@@ -183,10 +191,3 @@ class Transactions(object):
 		elif qif_str is not None:
 			lines = self.load_str(qif_str)
 		return self.parse_qif(lines)
-
-# ts = Transactions()
-# ts.load_qif('transactions.qif')
-# for t in ts:
-# 	print t.amount
-# for t in Transactions('transactions.qif'):
-# 	print t.amount
