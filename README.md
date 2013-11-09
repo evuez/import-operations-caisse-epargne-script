@@ -14,9 +14,11 @@ Les paramètres de connexion suivant doivent être défini dans un fichier setti
  * Votre code client
  * Votre numéro de compte (IBAN)
 
-## Test
+## Fonctionnalités
 
 La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichier QIF ou CSV de l'intervalle donné. Si aucun paramètre ne lui est passé, elle utilise l'intervalle maximal (jour courant - 60, jour courant - 1)
+
+### Principales
 
     bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
 
@@ -34,8 +36,12 @@ La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichie
     for t in Transactions('transactions.qif'):
         print '{0}: {1}'.format(t.date, t.amount)
 
-    # autres fonctionnalités
+### Autres
+
+    bank = Bank(CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN)
+
     transactions = Transactions()
+
     transactions.load_qif(qif_file='transactions.qif') # chargement d'un fichier QIF
     transactions.load_qif(qif_str=bank.get_transactions()) # écrase le premier chargement
 
