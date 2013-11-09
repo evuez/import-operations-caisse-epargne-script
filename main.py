@@ -101,9 +101,14 @@ class Transaction(object):
 		self.split_amount = None
 
 class Transactions(object):
-	QIF_FILE_START = '!Type:'
-	QIF_ENTRY_START = '^'
-	QIF_FIELDS = {
+	"""
+	Holds a list Transaction objects
+	Can load new Transaction object from
+	a QIF file or string
+	"""
+	FILE_START = '!Type:'
+	ENTRY_START = '^'
+	FIELDS = {
 		'D': 'date',
 		'T': 'amount',
 		'M': 'memo',
@@ -117,19 +122,11 @@ class Transactions(object):
 		'E': 'split_memo',
 		'$': 'split_amount'
 	}
-	def __init__(self, file_=None, string_=None):
+	def __init__(self, file_=None, str_=None):
 		self.current = 0
 		self.transactions = []
-
-		lines = self.load(file_, string_, required=False)
-		try:
-			start = lines[-1]
-		except (IndexError, TypeError):
-			return
-		if start.startswith(self.QIF_FILE_START):
-			self.load_qif(file_, string_)
-		else:
-			self.load_csv(file_, string_)
+		if any((file_, str_)) is True:
+			self.load_qif(file_, str_)
 	def __iter__(self):
 		return self
 	def next(self):
@@ -143,41 +140,34 @@ class Transactions(object):
 			return self.transactions[-1]
 		except IndexError:
 			return None
-	def load_file(self, transactions_file):
-		with open(transactions_file, 'r') as transactions:
-			transactions_string = transactions.read()
-		return self.load_string(transactions_string)
-	def load_string(self, transactions_string):
-		return transactions_string.splitlines()[::-1]
-	def load(self, file_, string_, required=True):
-		self.transactions = [] # reset transactions when loading new file or string
-
-		if file_ is not None:
-			return self.load_file(file_)
-		elif string_ is not None:
-			return self.load_string(string_)
-		elif required is True:
-			raise Exception("An argument is required")
+	def load_file(self, file_):
+		with open(file_, 'r') as transactions:
+			str_ = transactions.read()
+		return self.load_str(str_)
+	def load_str(self, str_):
+		return str_.splitlines()[::-1]
 	def parse_qif(self, qif_lines):
 		for l in qif_lines:
-			if l.startswith(self.QIF_FILE_START):
+			if l.startswith(self.FILE_START):
 				break
-			if l == self.QIF_ENTRY_START:
+			if l == self.ENTRY_START:
 				self.transactions.append(Transaction())
-			if l[0] in self.QIF_FIELDS:
+			if l[0] in self.FIELDS:
 				setattr(
 					self.transactions[-1],
-					self.QIF_FIELDS[l[0]],
+					self.FIELDS[l[0]],
 					l[1:]
 				)
 		return self.transactions
-	def load_qif(self, qif_file=None, qif_string=None):
-		return self.parse_qif(self.load(qif_file, qif_string))
-	def parse_csv(self, csv_lines):
-		pass
-	def load_csv(self, csv_file=None, csv_string=None):
-		pass
-
+	def load_qif(self, qif_file=None, qif_str=None):
+		self.transactions = [] # reset transactions when loading new file or string
+		if any((qif_file, qif_str)) is False:
+			raise Exception("An argument is required")
+		if qif_file is not None:
+			lines = self.load_file(qif_file)
+		elif qif_str is not None:
+			lines = self.load_str(qif_str)
+		return self.parse_qif(lines)
 
 # ts = Transactions()
 # ts.load_qif('transactions.qif')
