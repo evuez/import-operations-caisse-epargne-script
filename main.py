@@ -17,7 +17,7 @@ class Bank(object):
 		self.client_secret = client_secret
 		self.client_iban = client_iban
 
-		self.today = date.today()
+		self.today = date.today() - timedelta(days=1)
 
 		self.request = requests.session()
 	def _authenticate(self):
