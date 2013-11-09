@@ -26,10 +26,28 @@ La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichie
     # transactions des 6 derniers jours
     print bank.get_transactions(7, 1)
 
-	# utilisation du parseur pour afficher les transactions au format date: montant
-    qifp = QIFParser(qif_string=bank.get_transactions(10, 2))
-    for item in qifp.parse():
-        print '{0}: {1}'.format(item.date, item.amount)
+    # utilisation du parseur pour afficher les transactions
+    for t in Transactions(qif_str=bank.get_transactions()):
+        print '{0}: {1}'.format(t.date, t.amount)
+
+    # en utilisant un fichier
+    for t in Transactions('transactions.qif'):
+        print '{0}: {1}'.format(t.date, t.amount)
+
+    # autres fonctionnalités
+    transactions = Transactions()
+    transactions.load_qif(qif_file='transactions.qif') # chargement d'un fichier QIF
+    transactions.load_qif(qif_str=bank.get_transactions()) # écrase le premier chargement
+
+    transactions += Transaction() # ajoute une transaction vide
+
+    transactions.next() # retourne la transaction suivante et déplace le curseur
+    transactions.current() # retourne la transaction au niveau du curseur
+
+    transactions.first() # retourne la première transaction, ne déplace pas le curseur
+    transactions.last() # retourne la dernière transaction, ne déplace pas le curseur
+    transactions[3] # retourne la troisième transaction, ne déplace pas le curseur
+
 
 
   [1]: https://github.com/esion
