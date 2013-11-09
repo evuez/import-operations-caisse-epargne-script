@@ -88,6 +88,9 @@ class Bank(object):
 class ArgumentRequired(Exception):
 	pass
 
+class TransactionRequired(Exception):
+	pass
+
 class Transaction(object):
 	def __init__(self):
 		self.date = None
@@ -132,17 +135,24 @@ class Transactions(object):
 			self.load_qif(file_, str_)
 		except ArgumentRequired:
 			pass
+	def __add__(self, transaction):
+		if not isinstance(transaction, Transaction):
+			raise TransactionRequired
+		self.transactions.append(transaction)
+		return self
+	def __getitem__(self, key):
+		return self.transactions[key]
 	def __iter__(self):
 		return self
 	def next(self):
 		try:
 			self.current += 1
-			return self.transactions[self.current - 1]
+			return self[self.current - 1]
 		except IndexError:
 			raise StopIteration
 	def last(self):
 		try:
-			return self.transactions[-1]
+			return self[-1]
 		except IndexError:
 			return None
 	def load_file(self, file_):
@@ -156,14 +166,14 @@ class Transactions(object):
 			if l.startswith(self.FILE_START):
 				break
 			if l == self.ENTRY_START:
-				self.transactions.append(Transaction())
+				self += Transaction()
 			if l[0] in self.FIELDS:
 				setattr(
-					self.transactions[-1],
+					self[-1],
 					self.FIELDS[l[0]],
 					l[1:]
 				)
-		return self.transactions
+		return self
 	def load_qif(self, qif_file=None, qif_str=None):
 		self.transactions = [] # reset transactions when loading new file or string
 		if any((qif_file, qif_str)) is False:
