@@ -1,5 +1,6 @@
 settings.py*
 requests/
+bs4/
 *.sublime-*
 *.pyc
 *.qif

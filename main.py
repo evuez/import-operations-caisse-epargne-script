@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
+from bs4 import BeautifulSoup
 from datetime import date, timedelta
 from settings import CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN
 
@@ -20,6 +21,8 @@ class Bank(object):
 		self.today = date.today()
 
 		self.request = requests.session()
+
+		self._authenticate()
 	def _authenticate(self):
 		auth_payload = {
 			'codconf': CLIENT_SECRET,
@@ -78,9 +81,17 @@ class Bank(object):
 		start = (self.today - timedelta(days=from_days_ago)).strftime('%d/%m/%Y')
 		end = (self.today - timedelta(days=to_days_ago)).strftime('%d/%m/%Y')
 
-		self._authenticate()
 		self._load(start, end)
 		return self._retrieve()
+	def get_balance(self):
+		soup = BeautifulSoup(self.request.get(self.LOAD_URL, verify=True).text.encode('utf8'))
+		balance = soup \
+			.find(id='MM_SYNTHESE') \
+			.find(class_='panel') \
+			.find(class_='accompte') \
+			.find(class_='rowHover') \
+			.find(class_='somme')
+		return balance.get_text().encode('utf8')
 
 
 class ArgumentRequired(Exception):
