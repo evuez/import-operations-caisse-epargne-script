@@ -28,6 +28,9 @@ La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichie
     # transactions des 6 derniers jours
     print bank.get_transactions(7, 1)
 
+    # solde actuelle
+    print bank.get_balance()
+
     # utilisation du parseur pour afficher les transactions
     for t in Transactions(qif_str=bank.get_transactions()):
         print '{0}: {1}'.format(t.date, t.amount)
