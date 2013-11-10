@@ -17,7 +17,7 @@ class Bank(object):
 		self.client_secret = client_secret
 		self.client_iban = client_iban
 
-		self.today = date.today() - timedelta(days=1)
+		self.today = date.today()
 
 		self.request = requests.session()
 	def _authenticate(self):
@@ -38,7 +38,7 @@ class Bank(object):
 			'MM$TELECHARGE_OPERATIONS$groupeDate': 'fourchette',
 			'MM$TELECHARGE_OPERATIONS$m_DateDebut$txtDate': start,
 			'MM$TELECHARGE_OPERATIONS$m_DateFin$txtDate': end,
-			'MM$TELECHARGE_OPERATIONS$m_ExDDLListeComptes': 'C#{0}#{1}#EUR'.format(self.client_iban, self.today.strftime('%Y%m%d')),
+			'MM$TELECHARGE_OPERATIONS$m_ExDDLListeComptes': 'C#{0}#{1}#EUR'.format(self.client_iban, (date.today() - timedelta(days=2)).strftime('%Y%m%d')),
 			'__ASYNCPOST': 'true',
 			'__EVENTARGUMENT': '',
 			'__EVENTTARGET': 'MM$TELECHARGE_OPERATIONS$m_ChoiceBar$lnkRight',
