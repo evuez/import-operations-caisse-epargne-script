@@ -117,6 +117,12 @@ class Transaction(object):
 		self.split_category = None
 		self.split_memo = None
 		self.split_amount = None
+	def __eq__(self, transaction):
+		return self.__dict__ == transaction.__dict__
+	def __ne__(self, transaction):
+		return self.__dict__ != transaction.__dict__
+	def __str__(self):
+		return str(self.__dict__)
 
 class Transactions(object):
 	"""
@@ -178,6 +184,8 @@ class Transactions(object):
 			return self[self.cursor]
 		except IndexError:
 			raise None
+	def reset(self):
+		self.cursor = 0
 	def load_file(self, file_):
 		with open(file_, 'r') as transactions:
 			str_ = transactions.read()
