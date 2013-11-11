@@ -61,10 +61,10 @@ La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichie
 
     transactions_old.Transactions(qif_file='transactions.qif')
 
-    # voir les transactions qui ne sont pas dans `transactions_old` mais qui sont dans `transactions`
+    # voir les transactions qui ne sont pas dans transactions_old mais qui sont dans transactions
     print set(transactions_old) - set(transactions)
 
-    # voir les transactions qui sont dans `transactions_old` ou dans `transactions` mais pas dans les 2
+    # voir les transactions qui sont dans transactions_old ou dans transactions mais pas dans les 2
     print set(transactions_old) ^ set(transactions)
 
 
