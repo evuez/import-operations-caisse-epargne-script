@@ -188,7 +188,7 @@ class Transactions(object):
 	def write(self, file_):
 		if self.qif is None:
 			raise NoTransactionsLoaded
-		with open(file_, 'w') as f:
+		with open(file_, 'wb') as f:
 			f.write(self.qif)
 	def parse_qif(self, qif_lines):
 		for l in qif_lines:
