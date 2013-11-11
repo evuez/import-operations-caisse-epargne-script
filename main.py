@@ -97,9 +97,6 @@ class Bank(object):
 class ArgumentRequired(Exception):
 	pass
 
-class TransactionRequired(Exception):
-	pass
-
 class NoTransactionsLoaded(Exception):
 	pass
 
@@ -156,7 +153,7 @@ class Transactions(object):
 			pass
 	def __add__(self, transaction):
 		if not isinstance(transaction, Transaction):
-			raise TransactionRequired
+			raise NotImplemented
 		self.transactions.append(transaction)
 		return self
 	def __getitem__(self, key):
