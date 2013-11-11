@@ -114,10 +114,10 @@ class Transaction(object):
 		self.split_category = None
 		self.split_memo = None
 		self.split_amount = None
-	def __eq__(self, transaction):
-		return self.__dict__ == transaction.__dict__
-	def __ne__(self, transaction):
-		return self.__dict__ != transaction.__dict__
+	def __eq__(self, other):
+		return self.__dict__ == other.__dict__
+	def __ne__(self, other):
+		return self.__dict__ != other.__dict__
 	def __str__(self):
 		return str(self.__dict__)
 
@@ -151,10 +151,10 @@ class Transactions(object):
 			self.load_qif(file_, str_)
 		except ArgumentRequired:
 			pass
-	def __add__(self, transaction):
-		if not isinstance(transaction, Transaction):
+	def __add__(self, other):
+		if not isinstance(other, Transaction):
 			raise NotImplemented
-		self.transactions.append(transaction)
+		self.transactions.append(other)
 		return self
 	def __getitem__(self, key):
 		return self.transactions[key]
