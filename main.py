@@ -100,6 +100,9 @@ class ArgumentRequired(Exception):
 class TransactionRequired(Exception):
 	pass
 
+class NoTransactionsLoaded(Exception):
+	pass
+
 class Transaction(object):
 	def __init__(self):
 		self.date = None
@@ -139,6 +142,7 @@ class Transactions(object):
 	}
 	def __init__(self, file_=None, str_=None):
 		self.cursor = 0
+		self.qif = None
 		self.transactions = []
 		try:
 			self.load_qif(file_, str_)
@@ -179,7 +183,13 @@ class Transactions(object):
 			str_ = transactions.read()
 		return self.load_str(str_)
 	def load_str(self, str_):
+		self.qif = str_
 		return str_.splitlines()[::-1]
+	def write(self, file_):
+		if self.qif is None:
+			raise NoTransactionsLoaded
+		with open(file_, 'w') as f:
+			f.write(self.qif)
 	def parse_qif(self, qif_lines):
 		for l in qif_lines:
 			if l.startswith(self.FILE_START):
