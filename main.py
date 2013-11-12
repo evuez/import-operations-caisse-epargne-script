@@ -41,7 +41,7 @@ class Bank(object):
 			'MM$TELECHARGE_OPERATIONS$groupeDate': 'fourchette',
 			'MM$TELECHARGE_OPERATIONS$m_DateDebut$txtDate': start,
 			'MM$TELECHARGE_OPERATIONS$m_DateFin$txtDate': end,
-			'MM$TELECHARGE_OPERATIONS$m_ExDDLListeComptes': 'C#{0}#{1}#EUR'.format(self.client_iban, (date.today() - timedelta(days=3)).strftime('%Y%m%d')),
+			'MM$TELECHARGE_OPERATIONS$m_ExDDLListeComptes': 'C#{0}#{1}#EUR'.format(self.client_iban, (date.today() - timedelta(days=4)).strftime('%Y%m%d')),
 			'__ASYNCPOST': 'true',
 			'__EVENTARGUMENT': '',
 			'__EVENTTARGET': 'MM$TELECHARGE_OPERATIONS$m_ChoiceBar$lnkRight',
@@ -162,6 +162,11 @@ class Transactions(object):
 		return self.transactions[key]
 	def __iter__(self):
 		return self
+	def extend(self, other):
+		if not isinstance(other, set):
+			raise NotImplementedError
+		self.transactions.extend(other)
+		return self
 	def next(self):
 		try:
 			self.cursor += 1
@@ -192,7 +197,10 @@ class Transactions(object):
 	def load_str(self, str_):
 		self.qif = str_
 		return str_.splitlines()[::-1]
-	def write(self, file_):
+	def update(self, transactions):
+		self.extend(set(transactions) - set(self.transactions))
+		return self
+	def write(self, file_): # should generate QIF from self.transactions
 		if self.qif is None:
 			raise NoTransactionsLoaded
 		with open(file_, 'wb') as f:
