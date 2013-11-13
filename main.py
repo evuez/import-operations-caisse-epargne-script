@@ -223,12 +223,12 @@ class Transactions(object):
 					l[1:]
 				)
 		return self
-	def load_qif(self, qif_file=None, qif_str=None):
+	def load_qif(self, file_=None, str_=None):
 		self.transactions = [] # reset transactions when loading new file or string
-		if any((qif_file, qif_str)) is False:
+		if any((file_, str_)) is False:
 			raise ArgumentRequired
-		if qif_file is not None:
-			lines = self.load_file(qif_file)
-		elif qif_str is not None:
-			lines = self.load_str(qif_str)
+		if file_ is not None:
+			lines = self.load_file(file_)
+		elif str_ is not None:
+			lines = self.load_str(str_)
 		return self.parse_qif(lines)
