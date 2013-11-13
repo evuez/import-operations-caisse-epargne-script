@@ -41,7 +41,7 @@ class Bank(object):
 			'MM$TELECHARGE_OPERATIONS$groupeDate': 'fourchette',
 			'MM$TELECHARGE_OPERATIONS$m_DateDebut$txtDate': start,
 			'MM$TELECHARGE_OPERATIONS$m_DateFin$txtDate': end,
-			'MM$TELECHARGE_OPERATIONS$m_ExDDLListeComptes': 'C#{0}#{1}#EUR'.format(self.client_iban, (date.today() - timedelta(days=4)).strftime('%Y%m%d')),
+			'MM$TELECHARGE_OPERATIONS$m_ExDDLListeComptes': 'C#{0}#{1}#EUR'.format(self.client_iban, (date.today() - timedelta(days=5)).strftime('%Y%m%d')),
 			'__ASYNCPOST': 'true',
 			'__EVENTARGUMENT': '',
 			'__EVENTTARGET': 'MM$TELECHARGE_OPERATIONS$m_ChoiceBar$lnkRight',
@@ -201,10 +201,17 @@ class Transactions(object):
 		self.extend(set(transactions) - set(self.transactions))
 		return self
 	def write(self, file_): # should generate QIF from self.transactions
-		if self.qif is None:
+		if not self.transactions:
 			raise NoTransactionsLoaded
+		r_fields = {v:k for k,v in self.FIELDS.iteritems()}
+		contents = '{0}Bank\n'.format(self.FILE_START)
+		for x in self[::-1]:
+			for k,v in x.__dict__.iteritems():
+				if v is not None:
+					contents += '{0}{1}\n'.format(r_fields[k], v)
+			contents += '{0}\n'.format(self.ENTRY_START)
 		with open(file_, 'wb') as f:
-			f.write(self.qif)
+			f.write(contents)
 	def parse_qif(self, qif_lines):
 		for l in qif_lines:
 			if l.startswith(self.FILE_START):
