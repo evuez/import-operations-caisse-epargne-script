@@ -67,10 +67,10 @@ La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichie
     # voir les transactions qui sont dans transactions_old ou dans transactions mais pas dans les 2
     print set(transactions_old) ^ set(transactions)
 
-    # update transactions_old with new transactions from transactions
+    # met à jour transactions_old avec les nouvelles transactions de transactions
     transactions_old.update(transactions)
 
-    # write updated transactions_old to file transactions.qif
+    # écrit la version mise à jour de transactions_old dans un fichier transactions.qif
     transactions_old.write('transactions.qif')
 
 
