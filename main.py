@@ -147,7 +147,6 @@ class Transactions(object):
 	}
 	def __init__(self, file_=None, str_=None):
 		self.cursor = 0
-		self.qif = None
 		self.transactions = []
 		try:
 			self.load_qif(file_, str_)
@@ -195,12 +194,11 @@ class Transactions(object):
 			str_ = transactions.read()
 		return self.load_str(str_)
 	def load_str(self, str_):
-		self.qif = str_
 		return str_.splitlines()[::-1]
 	def update(self, transactions):
 		self.extend(set(transactions) - set(self.transactions))
 		return self
-	def write(self, file_): # should generate QIF from self.transactions
+	def write(self, file_):
 		if not self.transactions:
 			raise NoTransactionsLoaded
 		r_fields = {v:k for k,v in self.FIELDS.iteritems()}
