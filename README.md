@@ -32,7 +32,7 @@ La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichie
     print bank.get_balance()
 
     # utilisation du parseur pour afficher les transactions
-    for t in Transactions(qif_str=bank.get_transactions()):
+    for t in Transactions(str_=bank.get_transactions()):
         print '{0}: {1}'.format(t.date, t.amount)
 
     # en utilisant un fichier
@@ -45,8 +45,8 @@ La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichie
 
     transactions = Transactions()
 
-    transactions.load_qif(qif_file='transactions.qif') # chargement d'un fichier QIF
-    transactions.load_qif(qif_str=bank.get_transactions()) # écrase le premier chargement
+    transactions.load_qif(file_='transactions.qif') # chargement d'un fichier QIF
+    transactions.load_qif(str_=bank.get_transactions()) # écrase le premier chargement
 
     transactions += Transaction() # ajoute une transaction vide
 
@@ -59,13 +59,19 @@ La méthode `get_transactions([from_days_ago, [to_days_ago]])` renvoie le fichie
 
     transactions.reset() # déplace le curseur sur la première transaction
 
-    transactions_old.Transactions(qif_file='transactions.qif')
+    transactions_old.Transactions(file_='transactions.qif')
 
     # voir les transactions qui ne sont pas dans transactions_old mais qui sont dans transactions
     print set(transactions_old) - set(transactions)
 
     # voir les transactions qui sont dans transactions_old ou dans transactions mais pas dans les 2
     print set(transactions_old) ^ set(transactions)
+
+    # update transactions_old with new transactions from transactions
+    transactions_old.update(transactions)
+
+    # write updated transactions_old to file transactions.qif
+    transactions_old.write('transactions.qif')
 
 
 
