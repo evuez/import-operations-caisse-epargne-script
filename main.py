@@ -4,12 +4,13 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import date, timedelta
-from settings import CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN
+from settings import CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN, BANK_CODE
 
 class Bank(object):
-	AUTH_URL = 'https://www.net444.caisse-epargne.fr/login.aspx'
-	LOAD_URL = 'https://www.net444.caisse-epargne.fr/Portail.aspx'
-	RTRV_URL = 'https://www.net444.caisse-epargne.fr/Pages/telechargement.aspx'
+	BASE_URL = 'www.net{bank_code}.caisse-epargne.fr'.format(bank_code=BANK_CODE)
+	AUTH_URL = 'https://{0}/login.aspx'.format(BASE_URL)
+	LOAD_URL = 'https://{0}/Portail.aspx'.format(BASE_URL)
+	RTRV_URL = 'https://{0}/Pages/telechargement.aspx'.format(BASE_URL)
 
 	MAX_DAYS_AGO = 60
 	MIN_DAYS_AGO = 1
@@ -51,7 +52,7 @@ class Bank(object):
 			'm_ScriptManager' :'MM$m_UpdatePanel|MM$TELECHARGE_OPERATIONS$m_ChoiceBar$lnkRight'
 		}
 		load_headers = {
-			'Host': 'www.net444.caisse-epargne.fr',
+			'Host': self.BASE_URL,
 			'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:20.0) Gecko/20100101 Firefox/20.0 Iceweasel/20.0',
 			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 			'Accept-Language': 'en-US,en;q=0.5',
@@ -59,7 +60,7 @@ class Bank(object):
 			'X-MicrosoftAjax': 'Delta=true',
 			'Cache-Control': 'no-cache',
 			'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-			'Referer': 'https://www.net444.caisse-epargne.fr/Portail.aspx',
+			'Referer': 'https://{0}/Portail.aspx'.format(self.BASE_URL),
 			'Connection': 'keep-alive',
 			'Pragma': 'no-cache'
 		}
