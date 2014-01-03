@@ -91,7 +91,7 @@ class Bank(object):
 			.find(class_='accompte') \
 			.find(class_='rowHover') \
 			.find(class_='somme')
-		return balance.get_text().encode('utf8')
+		return balance.get_text().replace(u'\u00A0', ' ').encode('utf8')
 
 
 class ArgumentRequired(Exception):
