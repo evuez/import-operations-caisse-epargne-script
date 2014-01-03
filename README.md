@@ -13,6 +13,7 @@ Les paramètres de connexion suivant doivent être défini dans un fichier setti
  * Votre identifiant client
  * Votre code client
  * Votre numéro de compte (IBAN)
+ * Le code de votre banque (connectez-vous à votre compte et dans la source cherchez ceci : _www.net[code à 3 chiffres].caisse-epargne.fr_ ou le code à 3 chiffres sera le code de votre banque)
 
 ## Fonctionnalités
 
