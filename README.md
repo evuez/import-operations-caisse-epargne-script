@@ -14,6 +14,7 @@ Les paramètres de connexion suivant doivent être défini dans un fichier setti
  * Votre code client
  * Votre numéro de compte (IBAN)
  * Le code de votre banque (connectez-vous à votre compte et dans la source cherchez ceci : `www.net[code à 3 chiffres].caisse-epargne.fr` où le code à 3 chiffres sera le code de votre banque)
+ * Une date. Impossible pour le moment de trouver à quoi elle correspond, celle dans example.settings.py fonctionne tout le temps chez moi.
 
 ## Fonctionnalités
 
