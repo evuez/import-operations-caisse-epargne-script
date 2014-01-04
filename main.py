@@ -155,7 +155,7 @@ class Transactions(object):
 			pass
 	def __add__(self, other):
 		if not isinstance(other, Transaction):
-			raise NotImplemented
+			raise NotImplementedError
 		self.transactions.append(other)
 		return self
 	def __getitem__(self, key):
