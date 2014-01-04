@@ -4,7 +4,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import date, timedelta
-from settings import CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN, BANK_CODE
+from settings import CLIENT_ID, CLIENT_SECRET, CLIENT_IBAN, BANK_CODE, BANK_DATE
 
 class Bank(object):
 	BASE_URL = 'www.net{bank_code}.caisse-epargne.fr'.format(bank_code=BANK_CODE)
@@ -42,7 +42,7 @@ class Bank(object):
 			'MM$TELECHARGE_OPERATIONS$groupeDate': 'fourchette',
 			'MM$TELECHARGE_OPERATIONS$m_DateDebut$txtDate': start,
 			'MM$TELECHARGE_OPERATIONS$m_DateFin$txtDate': end,
-			'MM$TELECHARGE_OPERATIONS$m_ExDDLListeComptes': 'C#{0}#{1}#EUR'.format(self.client_iban, (date.today() - timedelta(days=5)).strftime('%Y%m%d')),
+			'MM$TELECHARGE_OPERATIONS$m_ExDDLListeComptes': 'C#{0}#{1}#EUR'.format(self.client_iban, BANK_DATE),
 			'__ASYNCPOST': 'true',
 			'__EVENTARGUMENT': '',
 			'__EVENTTARGET': 'MM$TELECHARGE_OPERATIONS$m_ChoiceBar$lnkRight',
