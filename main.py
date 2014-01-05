@@ -60,7 +60,7 @@ class Bank(object):
 			'X-MicrosoftAjax': 'Delta=true',
 			'Cache-Control': 'no-cache',
 			'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-			'Referer': 'https://{0}/Portail.aspx'.format(self.BASE_URL),
+			'Referer': self.LOAD_URL,
 			'Connection': 'keep-alive',
 			'Pragma': 'no-cache'
 		}
