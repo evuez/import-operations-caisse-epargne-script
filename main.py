@@ -46,9 +46,9 @@ class Bank(object):
 			'__ASYNCPOST': 'true',
 			'__EVENTARGUMENT': '',
 			'__EVENTTARGET': 'MM$TELECHARGE_OPERATIONS$m_ChoiceBar$lnkRight',
-			'__EVENTVALIDATION': '***REMOVED***',
+			'__EVENTVALIDATION': '',
 			'__LASTFOCUS': '',
-			'__VIEWSTATE': '***REMOVED***',
+			'__VIEWSTATE': '',
 			'm_ScriptManager' :'MM$m_UpdatePanel|MM$TELECHARGE_OPERATIONS$m_ChoiceBar$lnkRight'
 		}
 		load_headers = {
